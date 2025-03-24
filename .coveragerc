@@ -1,2 +1,2 @@
 [run]
-include = python_pypi_package_template/**
+include = python_sqlite_log_handler/**
