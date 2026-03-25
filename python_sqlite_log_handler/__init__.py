@@ -1,3 +1,4 @@
+import atexit
 import logging
 import sqlite3
 import threading
@@ -47,8 +48,13 @@ class SQLiteLogHandler(BufferingHandler):
         # Initialize the database
         self._initialize_db()
 
+        self._closed = False
+
         # Start background flush thread
         self._start_flush_thread()
+
+        # Ensure flush and cleanup on interpreter exit
+        atexit.register(self.close)
 
     def _get_conn(self) -> sqlite3.Connection:
         """Get a thread-local database connection."""
@@ -226,6 +232,10 @@ class SQLiteLogHandler(BufferingHandler):
 
     def close(self) -> None:
         """Close the handler and release resources."""
+        if self._closed:
+            return
+        self._closed = True
+
         # Stop background thread if running
         if hasattr(self, 'flush_thread') and self.flush_thread.is_alive():
             self.flush_thread_stop.set()
