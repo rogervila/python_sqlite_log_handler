@@ -46,8 +46,8 @@ logger.info("This is an info message")
 logger.warning("This is a warning message")
 logger.error("An error occurred", exc_info=True)
 
-# Don't forget to close the handler when done
-handler.close()
+# Handler closes automatically. You may close it manually if needed
+# handler.close()
 ```
 
 ## Advanced Usage
