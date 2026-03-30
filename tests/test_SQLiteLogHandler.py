@@ -327,8 +327,12 @@ class test_SQLiteLogHandler(unittest.TestCase):
         # Log a message
         logger.info("Message before close")
 
+        assert handler._closed == False, "Handler marked as closed prematurely!"
+
         # Close the handler
         handler.close()
+
+        assert handler._closed, "Handler was not marked as closed!"
 
         # Check the message was flushed
         conn = sqlite3.connect(close_db_path)
