@@ -188,6 +188,10 @@ class SQLiteLogHandler(BufferingHandler):
         if extra_attrs:
             data["extra"] = json.dumps(extra_attrs)
 
+        # Populate additional_fields columns
+        for field_name, _ in self.additional_fields:
+            data[field_name] = extra_attrs.get(field_name)
+
         return data
 
     def flush(self) -> None:
